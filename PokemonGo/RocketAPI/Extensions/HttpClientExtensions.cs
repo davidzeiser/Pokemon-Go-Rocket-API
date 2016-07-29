@@ -34,7 +34,13 @@ namespace PokemonGo.RocketAPI.Extensions
         {
       //      ColoredConsoleWrite(ConsoleColor.Red, ($"[DEBUG] [{DateTime.Now.ToString("HH:mm:ss")}] requesting {typeof(TResponsePayload).Name}"));
             var response = await PostProto(client, url, request);
-
+            
+            while(response.Payload.Count == 0)
+            {
+                await Task.Delay(300);
+                response = await PostProto(client, url, request);
+            }
+            
             //Decode payload
             //todo: multi-payload support
             var payload = response.Payload[0];
